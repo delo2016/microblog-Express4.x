@@ -49,7 +49,7 @@ User.get = function get(username,callback){
 
 			//查找name属性为username的文档
 			collection.findOne({name:username},function(err,doc){
-				mongodb.close();
+                 mongodb.close();
 				if(doc){
 					//封装文档为User对象
 					var user = new User(doc);
@@ -59,6 +59,7 @@ User.get = function get(username,callback){
 					callback(err,null);
 				}
 			});
+           
 		});
 	});
 };
