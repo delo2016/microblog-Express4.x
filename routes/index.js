@@ -83,7 +83,7 @@ router.post('/login',function(req,res){
       return res.redirect('/login');
     }
     req.session.user=user;
-    res.redirect('/');
+    res.redirect('/u/'+user.name);
     req.flash('success','登录成功！');
 
   })

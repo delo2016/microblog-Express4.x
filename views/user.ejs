@@ -1,13 +1,11 @@
 <% include header.ejs %>
 <div class="hero-unit">
-  <% if(!user) { %>
     <form action="/post" method="post" class="form-inline">
-      <div class="form-group">
+    <div class="form-group">
         <input type="text" name="post" class="form-control">
         <button type="submit" class="btn btn-success">发表</button>
-      </div>
+    </div>
     </form>
-  <% } %>
 </div>
 <% posts.forEach(function(post,index){
     if(index % 3 ==0){ %>  
