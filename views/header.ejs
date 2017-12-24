@@ -30,7 +30,7 @@
             <li><a href="/login">登入</a></li>
             <li><a href="/reg">注册</a></li>
             <% } else{ %>
-            <li><a href="#"><%= user.name %></a></li>
+            <li><a href="/users/<%= user.name %>" ><%= user.name %></a></li>
             <li><a href="/logout">登出</a></li>
             <% } %>
           </ul>

@@ -24,12 +24,12 @@ Post.prototype.save = function save(callback){
         post:this.post,
         time:this.time
     };
-    mongodb.open(function(err,db){
+    mongodb.open((err,db)=>{
         if(err){
             return callback(err);
         }
         //读取posts集合
-        db.collection('posts',function(err,collection){
+        db.collection('posts',(err,collection)=>{
             if(err){
                 mongodb.close();
                 return callback(err);
@@ -37,7 +37,7 @@ Post.prototype.save = function save(callback){
             //为user添加索引
             //collection.ensureIndex('user',{unique:false});
             //写入post文档
-            collection.insert(post,function(err,post){
+            collection.insert(post,(err,post)=>{
                 mongodb.close();
                 callback(err,post);
             });
@@ -48,31 +48,26 @@ Post.prototype.save = function save(callback){
 
 
 Post.get = function get(username,callback){
-	mongodb.open(function(err,db){
+	mongodb.open((err,db)=>{
 		if(err){
 			return callback(err);
 		}
 		//读取posts集合
-		db.collection('posts',function(err,collection){
+		db.collection('posts',(err,collection)=>{
 			if(err){
                 mongodb.close();
 				return callback(err);
 			}
 
 			//查找user属性为username的文档
-            collection.find({"user.name":username}).sort({time:-1}).toArray(function(err,docs){
+            collection.find({"user.name":username}).sort({time:-1}).toArray((err,docs)=>{
                 mongodb.close();
                 if(err){
                     callback("err",null);
                 }
                 //封装文档为post对象
-
-
-
-
-
                 var posts =[];
-                docs.forEach(function(doc,index){
+                docs.forEach((doc,index)=>{
                     var post = new Post(doc.user,doc.post,doc.time);
                     posts.push(post);
                 });

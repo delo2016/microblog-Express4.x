@@ -6,17 +6,18 @@
     "start": "nodejs ./app.js"
   },
   "dependencies": {
-    "express": "~4.0.0",
-    "static-favicon": "~1.0.0",
-    "morgan": "~1.0.0",
-    "cookie-parser": "~1.0.1",
     "body-parser": "~1.0.0",
+    "connect-flash": ">=0.0.1",
+    "connect-mongo": ">=0.1.7",
+    "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",
     "ejs": "~0.8.5",
-    "mongodb":">=0.9.9",
-    "jquery":">=1.12.4",
-    "connect-mongo":">=0.1.7",
-    "express-session":">=0.0.1",
-    "connect-flash":">=0.0.1"
+    "es-checker": "^1.4.1",
+    "express": "~4.0.0",
+    "express-session": ">=0.0.1",
+    "jquery": ">=1.12.4",
+    "mongodb": ">=0.9.9",
+    "morgan": "~1.0.0",
+    "static-favicon": "~1.0.0"
   }
 }

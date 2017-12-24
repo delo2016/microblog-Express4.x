@@ -11,11 +11,11 @@ var flash = require('connect-flash');
 
 router.get('/reg',checkNotLogin);
 
-router.get('/reg',function(req,res){
+router.get('/reg',(req,res)=>{
   res.render('reg',{title:'用户注册'});
 });
 
-router.post('/reg',function(req,res){
+router.post('/reg',(req,res)=>{
   if(req.body['password-repeat']!= req.body['password']){
     req.flash('error','两次口令不一致！');
     return res.redirect('/reg');
@@ -29,7 +29,7 @@ router.post('/reg',function(req,res){
     password:password,
   });
   //检查该用户名是否已被注册
-  User.get(newUser.name,function(err,user){
+  User.get(newUser.name,(err,user)=>{
     if(user){
       err='该用户名已被注册';
     }
@@ -40,7 +40,7 @@ router.post('/reg',function(req,res){
     }
     
     //数据库没有该用户名，可以新增
-    newUser.save(function(err){
+    newUser.save((err)=>{
       if(err){
         req.flash('error',err);
         return res.redirect('/reg');
@@ -58,18 +58,18 @@ router.post('/reg',function(req,res){
 
 router.get('/login',checkNotLogin);
 
-router.get('/login',function(req,res){
+router.get('/login',(req,res)=>{
   res.render('login',{title:'用户登录'});
 });
 
-router.post('/login',function(req,res){
+router.post('/login',(req,res)=>{
 
   //生成口令散列值
   var md5 = crypto.createHash('md5');
   var password = md5.update(req.body.password).digest('base64');
 
   var loginUser = {name:req.body.username,password:password}
-  User.get(loginUser.name,function(err,user){
+  User.get(loginUser.name,(err,user)=>{
     if(err){
       req.flash('error',err);
       return res.redirect('/login');
@@ -92,7 +92,7 @@ router.post('/login',function(req,res){
 
 router.get('/logout',checkLogin);
 
-router.get('/logout',function(req,res){
+router.get('/logout',(req,res)=>{
   req.session.user = null;
   req.flash('success','登出成功！');
   res.redirect('/');
@@ -100,10 +100,10 @@ router.get('/logout',function(req,res){
 
 router.get('/post',checkLogin);
 
-router.post('/post',function(req,res){
+router.post('/post',(req,res)=>{
   var currUser = req.session.user;
   var post = new Post(currUser,req.body.post,null);
-  post.save(function(err,post){
+  post.save((err,post)=>{
     if(err){
       req.flash('error','发表失败！');
       return res.redirect('/');
@@ -113,13 +113,13 @@ router.post('/post',function(req,res){
   });
 });
 
-router.get('/u/:user',function(req,res){
-  User.get(req.params.user,function(err,user){
+router.get('/u/:user',(req,res)=>{
+  User.get(req.params.user,(err,user)=>{
     if(!user){
       req.flash('error','用户不存在');
       return res.redirect('/');
     }
-    Post.get(user.name,function(err,posts){
+    Post.get(user.name,(err,posts)=>{
       if(err){
         req.flash('error',err);
         return res.redirect('/');
@@ -132,8 +132,8 @@ router.get('/u/:user',function(req,res){
   })
 });
 
-router.get('/',function(req,res){
-  Post.get(null,function(err,posts){
+router.get('/',(req,res)=>{
+  Post.get(null,(err,posts)=>{
     if(err){
       posts=[];
     }
@@ -144,7 +144,7 @@ router.get('/',function(req,res){
   })
 });
 
-function checkNotLogin(req,res,next){
+function checkNotLogin (req,res,next){
   if(req.session.user){
     req.flash('error','已登入');
     res.redirect('/');

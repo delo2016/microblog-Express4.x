@@ -34,6 +34,24 @@ User.prototype.save = function save(callback){
 
 }
 
+User.prototype.update = function update(user,callback){
+    mongodb.open(function(err,db){
+        if(err){
+            return callback(err);
+        }
+        db.collection('users',function(err,collection){
+            if(err){
+                mongodb.close();
+                return callback(err);
+            }
+            collection.update({name:user.name},{$set:{password:user.password}},(err,result)=>{
+                mongodb.close();
+                return callback(err,result);
+            })
+        });
+    })
+}
+
 
 User.get = function get(username,callback){
 	mongodb.open(function(err,db){
