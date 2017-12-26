@@ -1,8 +1,13 @@
 var mongodb = require('./db.js');
-//var uuid = require('node-uuid');
+var uuid = require('uuid/v1');
 
-function Post(username,post,time){
-    this.user = username;
+function Post(postid,user,post,time){
+    if(postid){
+        this.postid = postid;
+    }else{
+        this.postid = uuid();
+    }
+    this.user = user;
     this.post = post;
     if(time){
         this.time = time;
@@ -19,7 +24,7 @@ Post.prototype.save = function save(callback){
         return callback("请登录后再发表");
     }
     var post = {
-        //_id:uuid.v1(),
+        postid:this.postid,
         user:this.user,
         post:this.post,
         time:this.time
@@ -68,7 +73,7 @@ Post.get = function get(username,callback){
                 //封装文档为post对象
                 var posts =[];
                 docs.forEach((doc,index)=>{
-                    var post = new Post(doc.user,doc.post,doc.time);
+                    var post = new Post(doc.postid,doc.user,doc.post,doc.time);
                     posts.push(post);
                 });
                 callback(null,posts);
@@ -76,3 +81,22 @@ Post.get = function get(username,callback){
 		});
 	});
 };
+
+Post.delete = function(postid,callback){
+    mongodb.open((err,db)=>{
+        if(err){
+            return callback(err);
+        }
+        //读取posts集合
+        db.collection('posts',(err,collection)=>{
+            if(err){
+                mongodb.close();
+                return callback(err);
+            }
+            collection.removeOne({"postid":postid.toString()},(err,result)=>{
+                mongodb.close();
+                callback(err);
+            });
+        });
+    });
+}

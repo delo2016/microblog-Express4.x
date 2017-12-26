@@ -5,9 +5,21 @@ var User = require('../models/user.js');
 var Post = require('../models/post.js');
 var flash = require('connect-flash');
 
-// router.get('/', function(req, res) {
-//   res.render('index', { title: '首页' });
-// });
+router.get('/',(req,res)=>{
+  var loginName='';
+  if(req.session.user !== null && req.session.user !== undefined) {
+    loginName = req.session.user.name;
+  }
+  Post.get(loginName,(err,posts)=>{
+    if(err){
+      posts=[];
+    }
+    res.render('blog',{
+      title:'首页',
+      posts:posts
+    })
+  })
+});
 
 router.get('/reg',checkNotLogin);
 
@@ -102,7 +114,7 @@ router.get('/post',checkLogin);
 
 router.post('/post',(req,res)=>{
   var currUser = req.session.user;
-  var post = new Post(currUser,req.body.post,null);
+  var post = new Post(null,currUser,req.body.post,null);
   post.save((err,post)=>{
     if(err){
       req.flash('error','发表失败！');
@@ -114,35 +126,42 @@ router.post('/post',(req,res)=>{
 });
 
 router.get('/u/:user',(req,res)=>{
-  User.get(req.params.user,(err,user)=>{
-    if(!user){
-      req.flash('error','用户不存在');
-      return res.redirect('/');
-    }
-    Post.get(user.name,(err,posts)=>{
-      if(err){
-        req.flash('error',err);
+  if(req.session.user!==undefined){
+    User.get(req.params.user,(err,user)=>{
+      if(!user){
+        req.flash('error','用户不存在');
         return res.redirect('/');
       }
-      res.render('user',{
-        title:user.name,
-        posts:posts
-      });
+      Post.get(user.name,(err,posts)=>{
+        if(err){
+          req.flash('error',err);
+          return res.redirect('/');
+        }
+        res.render('blog',{
+          title:user.name,
+          posts:posts
+        });
+      })
     })
-  })
+  }else{
+    return res.redirect('/');
+  }
 });
 
-router.get('/',(req,res)=>{
-  Post.get(null,(err,posts)=>{
-    if(err){
-      posts=[];
-    }
-    res.render('index',{
-      title:'首页',
-      posts:posts
+router.get('/post/delete/:postid',checkLogin);
+
+router.get('/post/delete/:postid',(req,res)=>{
+  if(req.session.user!==null || req.session.user!= undefined){
+    Post.delete(req.params.postid,(err)=>{
+      if(err){
+        req.flash('error','删除失败！');
+        return res.redirect('/u/'+req.session.user.name);
+      }
+      res.redirect(303,'/u/'+req.session.user.name);
     })
-  })
-});
+  }
+})
+
 
 function checkNotLogin (req,res,next){
   if(req.session.user){
