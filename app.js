@@ -6,9 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
+var fs = require('fs');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var posts = require('./routes/posts');
 var MongoStore = require('connect-mongo')(session);
 var settings = require('./setting');
 
@@ -55,9 +57,19 @@ app.use((req,res,next)=>{
   next();
 });
 
-app.use('/', routes);
-app.use('/users', users);
 
+app.use('/', routes);
+// var routePath = path.join(__dirname, 'routes/')
+// fs.readdir(routePath,(err,files)=>{
+//     if(err) return;
+//     files.forEach(item => {
+//         let routeName = item.split('.');
+//         app.use('/'+routeName[0],require('./routes/'+routeName[0]));
+//     });
+// });
+
+app.use('/users', users);
+app.use('/posts',posts);
 
 
 /// catch 404 and forwa/users/rding to error handler
@@ -80,7 +92,6 @@ if (app.get('env') === 'development') {
         });
     });
 }
-
 // production error handler
 // no stacktraces leaked to user
 app.use((err, req, res, next)=> {

@@ -16,6 +16,7 @@
     "express": "~4.0.0",
     "express-session": ">=0.0.1",
     "jquery": ">=1.12.4",
+    "moment": "^2.20.1",
     "mongodb": ">=0.9.9",
     "morgan": "~1.0.0",
     "static-favicon": "~1.0.0",

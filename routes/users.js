@@ -1,5 +1,4 @@
-var express = require('express');
-var router = express.Router();
+var router = require('./index');
 var crypto = require('crypto');
 var User = require('../models/user.js');
 var flash = require('connect-flash');
@@ -27,7 +26,7 @@ router.post('/modifypassword/:username', (req, res)=> {
     var orignpwd = md5.update(req.body.orignpwd).digest('base64')
     if(err){
       req.flash('error',err);
-      return res.redirect('/');
+      return res.rrouteredirect('/');
     }
     else if(!user){
       req.flash('error','该用户不存在！');

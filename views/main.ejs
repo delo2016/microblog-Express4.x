@@ -5,7 +5,7 @@
 			<div class="row" id="edit_form" >
 				<span class="pull-left" style="margin:15px;">编写新鲜事</span>
 				<span class="tips pull-right" style="margin:15px;"></span>
-				<form action="/post" method="POST" style="margin-top: 50px;">
+				<form action="/posts/post" method="POST" style="margin-top: 50px;">
 					  <div class="form-group">
 						   <div class="col-sm-12">
 								<textarea type="text" id="content" name="post" class="form-control "></textarea> 
@@ -44,30 +44,53 @@
 			<% posts.forEach(function(post,index){ %>
 			<div class="row item_msg">
 				<div class="col-sm-12 col-xs-12 message" >
-					<img src="/images/img/icon.png" class="col-sm-2 col-xs-2" style="border-radius: 50%">
-					<div class="col-sm-10 col-xs-10">
-						<div class="row">
-							<div class="col-sm-10">
-								<span style="font-weight: bold;"><%= post.user.name %></span>
+					<div class="row">
+						<img src="/images/img/icon.png" class="col-sm-2 col-xs-2" style="border-radius: 50%">
+						<div class="col-sm-10 col-xs-10">
+							<div class="row">
+								<div class="col-sm-10">
+									<span style="font-weight: bold;"><%= post.user.name %></span>
+								</div>
+								<div class="col-sm-2">
+									<ul style="list-style-type:none;width:10px;margin-right:5px;">
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b>
+											</a>
+											<ul class="dropdown-menu">
+												<li><a href="/posts/post/delete/<%= post.postid %>">删除</a></li>
+											</ul>
+										</li>
+									</ul>
+								</div>
 							</div>
-							<div class="col-sm-2">
-								<ul style="list-style-type:none;width=10px;margin-right:5px;">
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b>
-										</a>
-										<ul class="dropdown-menu">
-											<li><a href="/post/delete/<%= post.postid %>">删除</a></li>
-										</ul>
-									</li>
-								</ul>
+							<small class="date" style="color:#999"><%= post.time %></small>
+							<div class="msg_content">
+								<p><%= post.post %></p>
+								<img class="mypic" src="/images/img/bg_1.jpg" >
 							</div>
 						</div>
-						<small class="date" style="color:#999"><%= post.time %></small>
-						<div class="msg_content">
-							<p><%= post.post %></p>
-							<img class="mypic" src="/images/img/bg_1.jpg" >
-						</div>
-					 </div>
+					</div>
+					<hr>
+					<div class="row" style="height:38px;">
+						<ul id="menu">
+							<li>
+								<a href="">
+									<span>
+										<em class="glyphicon glyphicon-comment"></em>
+										<em>3</em>
+									</span>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									<span>
+										<em class="glyphicon glyphicon-thumbs-up"></em>
+										<em>5</em>
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 			<%  }) %>
@@ -88,20 +111,26 @@
 		<div class="col-sm-3 col-xs-12 part_right" >
 			<% if(user) {  %>
 			<div class="row text-center inform">
-				<img src="/images/img/icon.png" >
-				<h4 style="font-weight: bold;"><%= user.name %></h4>
+				<a href="#" style="color:black;"><img src="/images/img/icon.png" >
+				<h4 style="font-weight: bold;"><%= user.name %></h4></a>
 				<div class="col-sm-12 my_inform" >
 					<div class="col-sm-4 col-xs-4">
-						<div>111</div>
-						<div class="sort">关注</div>
+						<a href="#">
+							<strong style="color:black;"><%= user.following.length %></strong>
+							<div><span class="sort">关注</span></div>
+						</a>
 					</div>
 					<div class="col-sm-4 col-xs-4">
-						<div>111</div>
-						<div class="sort">粉丝</div>
+						<a href="#">
+							<strong style="color:black;"><%= user.followers.length %></strong>
+							<div><span class="sort">粉丝</span></div>
+						</a>
 					</div>
 					<div class="col-sm-4 col-xs-4">
-						<div>111</div>
-						<div class="sort">博客</div>
+						<a href="#">
+							<strong style="color:black;"><%= posts.length %></strong>
+							<div><span class="sort">微博</span></div>
+						</a>
 					</div>
 				</div>
 			</div> 
